@@ -5,6 +5,25 @@ from time import sleep
 from easygui import passwordbox
 import pandas as pd
 
+'''
+    element_exist = 0
+
+    while element_exist != True:
+        element_exist = False if len(browser.find_elements_by_class_name('review-rating__point')) > 0 else True
+        sleep(1)
+
+
+   # wait = WebDriverWait(browser,10)
+   # rate = wait.until(EC.visibility_of_element_located((By.CLASS_NAME,'review-rating__point')))
+
+
+    while True:
+        try:
+            rate = browser.find_elements_by_class_name('review-rating__point')
+            break
+        except common.exceptions.NoSuchElementException:
+            rate = 0
+'''
 
 # Lưu ý: Cần đặt file chromedriver chung bên cạnh để có thể chạy chương trình
 
