@@ -104,7 +104,9 @@ def create_file(df):
     ask = input("Wanna create a csv file with this dataframe ?(y/n)")
     if ask == "y":
         f_name = input("file name:")
-        df.to_csv("C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\mouse24link.csv")
+        path = "C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\"+str(f_name)+".csv"
+        df.to_csv(path)
+        print("Your file has been saved in",path)
     return
 
 print(which_next(check,countinute))
