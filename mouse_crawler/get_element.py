@@ -1,16 +1,28 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+
+#from ..get_mouse_link import page_up
+from time import sleep
+import random
 import pandas as pd
 
 
-
+def page_up():
+    html = browser.find_element_by_tag_name('html')
+    for i in range(5):
+        html.send_keys(Keys.PAGE_UP)
+    sleep(2)
+    return
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--window-size=1920x1080")
+
+
 
 df = pd.read_csv("mouse_link.csv")
 n = 1
@@ -18,15 +30,31 @@ n = 1
 for link in df["m_link"]:
 
     browser = webdriver.Chrome(executable_path="chromedriver.exe")
+    browser.maximize_window()
     browser.get(str(link))
     #browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     try:
-        name = WebDriverWait(browser,10).until(
-            EC.presence_of_element_located((By.CLASS_NAME,"title"))
+        seller = WebDriverWait(browser,10).until(
+            EC.presence_of_element_located((By.CLASS_NAME,"seller-name"))
         )
+        name = browser.find_element_by_class_name("title")
     finally:
-        print(n,name.text)
+        print(n, name.text)
+        print("Shop :", seller.text)
     print("link:", link)
+
+    brand = browser.find_element_by_class_name("brand-and-author ")
+    print(brand.text)
+
+    element_exist = False if len(browser.find_element_by_class_name("itemRight")) > 0 else True
+    if element_exist == False:
+
+        warranty = browser.find_element_by_class_name("itemRight")
+        print(warranty.text)
+    else:
+        warranty = "Return in 7 days"
+        print(warranty)
+
 
     element_exist = False if len(browser.find_elements_by_class_name('product-price__current-price')) > 0 else True
     if element_exist == False:
@@ -40,12 +68,15 @@ for link in df["m_link"]:
 
     browser.execute_script("window.scrollTo(0, 2350)")
 
+    sleep(random.randint(1,3))
+
     element_exist = False if len(browser.find_elements_by_xpath('/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]')) > 0 else True
+    print(page_up())
     if element_exist == False:
         sold = browser.find_element_by_xpath("/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
         print(sold.text)
         try:
-            rate = WebDriverWait(browser, 10).until(
+            rate = WebDriverWait(browser,20).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "review-rating__point"))
             )
             review = browser.find_element_by_class_name('review-rating__total')
