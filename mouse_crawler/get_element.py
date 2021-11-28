@@ -48,7 +48,6 @@ for link in df["m_link"]:
 
     element_exist = False if len(browser.find_element_by_class_name("itemRight")) > 0 else True
     if element_exist == False:
-
         warranty = browser.find_element_by_class_name("itemRight")
         print(warranty.text)
     else:
@@ -69,7 +68,8 @@ for link in df["m_link"]:
     browser.execute_script("window.scrollTo(0, 2350)")
 
     sleep(random.randint(1,3))
-
+    come_from = browser.find_element_by_xpath(
+        "/html/body/div[1]/div[1]/main/div[3]/div[3]/div[1]/div[1]/div/table/tbody/tr[3]/td[2]").text
     element_exist = False if len(browser.find_elements_by_xpath('/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]')) > 0 else True
     print(page_up())
     if element_exist == False:
