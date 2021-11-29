@@ -45,14 +45,16 @@ class Mouse_Tiki_Crawler():
 
         try:
             element = WebDriverWait(self.browser, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, str(classname))).text
-            )
+                EC.presence_of_element_located((By.CLASS_NAME, str(classname)))
+            ).text
+
         except:
+
             if classname2 != "Non":
                 try:
                     element = WebDriverWait(self.browser, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, str(classname2))).text
-                    )
+                    EC.presence_of_element_located((By.CLASS_NAME, str(classname2)))
+                    ).text
                 except:
                     element = "Non"
             else: element  = "Non"
@@ -66,8 +68,8 @@ class Mouse_Tiki_Crawler():
 
         try:
             element = WebDriverWait(self.browser, 10).until(
-                EC.presence_of_element_located((By.XPATH, str(el_xpath))).text
-            )
+                EC.presence_of_element_located((By.XPATH, str(el_xpath)))
+            ).text
         except:
             element = 0
         finally:
@@ -78,17 +80,27 @@ class Mouse_Tiki_Crawler():
 
         self.browser.execute_script("window.scrollTo(0, 2350)")
         try:
-            element = WebDriverWait(self.browser, 10).until(
-                EC. presence_of_all_elements_located((By.CLASS_NAME, str(string))).text
-            )
+            star = WebDriverWait(self.browser, 10).until(
+                EC. presence_of_all_elements_located((By.CLASS_NAME, str(string)))
+            ).text
         except:
-            element = [0,0,0,0,0]
+            star = [0,0,0,0,0]
         finally:
             star5 = star[0]
             star4 = star[1]
             star3 = star[2]
             star2 = star[3]
             star1 = star[4]
+
+            def show_rate_star(star1, star2, star3, star4, star5):
+                print("5 star :", star5, "\n"
+                                         "4 star :", star4, "\n"
+                                                            "3 star :", star3, "\n"
+                                                                               "2 star :", star2, "\n"
+                                                                                                  "1 star :", star1,
+                      "\n")
+
+            print(show_rate_star(star1, star2, star3, star4, star5))
         return star5,star4,star3,star2,star1
 
     def fill_data(self,col,val):
