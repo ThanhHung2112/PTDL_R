@@ -44,7 +44,7 @@ class Mouse_Tiki_Crawler():
     def find_1ele_by_classname(self,classname,classname2):
 
         try:
-            element = WebDriverWait(self.browser, 20).until(
+            element = WebDriverWait(self.browser, 15).until(
                 EC.presence_of_element_located((By.CLASS_NAME, str(classname)))
             ).text
 
@@ -78,40 +78,51 @@ class Mouse_Tiki_Crawler():
 
     def get_rate_star(self,string):
 
+        star_list1 = []
         self.browser.execute_script("window.scrollTo(0, 2350)")
         try:
             star = WebDriverWait(self.browser, 10).until(
                 EC. presence_of_all_elements_located((By.CLASS_NAME, str(string)))
-            ).text
+            )
+            def rate_star_list(star):
+                if len(star) > 0:
+                    for i in star:
+                        star_list1.append(i.text)
+                return star_list1
+            #print("done Try")
+            rate_star_list(star)
+            #print(star_list1)
+            #star = self.browser.find_elements_by_class_name(str(string)).text
         except:
-            star = [0,0,0,0,0]
+            star_list1 = [0,0,0,0,0]
         finally:
-            star5 = star[0]
-            star4 = star[1]
-            star3 = star[2]
-            star2 = star[3]
-            star1 = star[4]
+            def last_star_list(star_list = []):
+                #print("len", len(star_list1))
+                if len(star_list1) == 5:
+                    star_list = star_list1
+                elif (len(star_list1) == 4) :
+                    star_list = star_list1
+                elif len(star_list1) < 4 :
+                    for i in range(4 - len(star_list1)):
+                        star_list.append(0)
+                    for i in star_list1:
+                        star_list.append(i)
 
-            def show_rate_star(star1, star2, star3, star4, star5):
-                print("5 star :", star5, "\n"
-                                         "4 star :", star4, "\n"
-                                                            "3 star :", star3, "\n"
-                                                                               "2 star :", star2, "\n"
-                                                                                                  "1 star :", star1,
-                      "\n")
+                return star_list
+            #last_star_list()
+            def show_rate_star(star_list):
+                #print("list ")
+                for i in star_list:
+                    print(i)
+                return
 
-            print(show_rate_star(star1, star2, star3, star4, star5))
-        return star5,star4,star3,star2,star1
+            show_rate_star(last_star_list())
+
+        return last_star_list()
 
     def fill_data(self,col,val):
         self.df[str(col)][self.n] = val
         return
 
-    def Create_file(self):
 
-        f_name = input("file name:")
-        path = "C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\" + str(f_name) + ".csv"
-        self.df.to_csv(path)
-
-        return print("Your file has been saved in", path)
 
