@@ -42,10 +42,10 @@ class Mouse_Tiki_Crawler():
 
         return self.browser.get(url)
 
-    def find_1ele_by_classname(self,classname,classname2):
+    def find_1ele_by_classname(self,time,classname,classname2):
 
         try:
-            element = WebDriverWait(self.browser, 12).until(
+            element = WebDriverWait(self.browser, time).until(
                 EC.presence_of_element_located((By.CLASS_NAME, str(classname)))
             ).text
 
@@ -53,7 +53,7 @@ class Mouse_Tiki_Crawler():
 
             if classname2 != "Non":
                 try:
-                    element = WebDriverWait(self.browser, 10).until(
+                    element = WebDriverWait(self.browser, time).until(
                     EC.presence_of_element_located((By.CLASS_NAME, str(classname2)))
                     ).text
                 except:
@@ -65,10 +65,10 @@ class Mouse_Tiki_Crawler():
 
         return element
 
-    def find_ele_by_xpath(self,el_xpath):
+    def find_ele_by_xpath(self,time,el_xpath):
 
         try:
-            element = WebDriverWait(self.browser, 10).until(
+            element = WebDriverWait(self.browser, time).until(
                 EC.presence_of_element_located((By.XPATH, str(el_xpath)))
             ).text
         except:
@@ -77,12 +77,12 @@ class Mouse_Tiki_Crawler():
             print(element)
         return element
 
-    def get_rate_star(self,string):
+    def get_rate_star(self,time,string):
 
         star_list1 = []
         self.browser.execute_script("window.scrollTo(0, 2350)")
         try:
-            star = WebDriverWait(self.browser, 10).until(
+            star = WebDriverWait(self.browser, time).until(
                 EC. presence_of_all_elements_located((By.CLASS_NAME, str(string)))
             )
             def rate_star_list(star):

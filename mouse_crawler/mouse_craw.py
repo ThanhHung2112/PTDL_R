@@ -11,7 +11,7 @@ from time import sleep
 import random
 import pandas as pd
 
-df = pd.read_csv("mouse_link.csv")
+df = pd.read_csv("mouse24link.csv")
 
 class start_craw:
     def __init__(self,df):
@@ -33,23 +33,23 @@ class start_craw:
             #print(MTC.setting_options())
             MTC.start_url()
             print(n+1,i)
-            self.df["Name"][n] = MTC.find_1ele_by_classname("title",cls2)
-            self.df["Price"][n] = MTC.find_1ele_by_classname("product-price__current-price","flash-sale-price")
-            self.df["Product_price"][n] = MTC.find_1ele_by_classname("product-price__list-price",cls2)
-            self.df["Discount"][n] = MTC.find_1ele_by_classname("product-price__discount-rate",cls2)
-            self.df["Shop"][n] = MTC.find_1ele_by_classname("seller-name",cls2)
-            self.df["Brand"][n] =  MTC.find_1ele_by_classname("brand-and-author",cls2)
-            warranty = MTC.get_rate_star("itemRight")
+            self.df["Name"][n] = MTC.find_1ele_by_classname(10,"title",cls2)
+            self.df["Price"][n] = MTC.find_1ele_by_classname(10,"product-price__current-price","flash-sale-price")
+            self.df["Product_price"][n] = MTC.find_1ele_by_classname(0,"product-price__list-price",cls2)
+            self.df["Discount"][n] = MTC.find_1ele_by_classname(0,"product-price__discount-rate",cls2)
+            self.df["Shop"][n] = MTC.find_1ele_by_classname(10,"seller-name",cls2)
+            self.df["Brand"][n] =  MTC.find_1ele_by_classname(0,"brand-and-author",cls2)
+            warranty = MTC.get_rate_star(2,"itemRight")
             print(len(warranty))
             self.df["Warranty"][n] = warranty[0]
             self.df["Warranty_way"][n] = warranty[1]
             self.df["Warranty_place"][n] = warranty[2]
-            self.df["Sold"][n] = MTC.find_ele_by_xpath("/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
+            self.df["Sold"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
             MTC.script_page()
-            self.df["From"][n] = MTC.find_ele_by_xpath("/html/body/div[1]/div[1]/main/div[3]/div[3]/div[1]/div[1]/div/table/tbody/tr[3]/td[2]")
-            self.df["Rate"][n] = MTC.find_1ele_by_classname("review-rating__point",cls2)
-            self.df["Comment"][n] = MTC.find_1ele_by_classname("review-rating__total",cls2)
-            star = MTC.get_rate_star("review-rating__number")
+            self.df["From"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[3]/div[1]/div[1]/div/table/tbody/tr[3]/td[2]")
+            self.df["Rate"][n] = MTC.find_1ele_by_classname(2,"review-rating__point",cls2)
+            self.df["Comment"][n] = MTC.find_1ele_by_classname(2,"review-rating__total",cls2)
+            star = MTC.get_rate_star(2,"review-rating__number")
             self.df["5"][n] = star[0]
             self.df["4"][n] = star[1]
             self.df["3"][n] = star[2]
@@ -62,16 +62,17 @@ class start_craw:
             #print(df.loc[n])
             n += 1
 
+        def Create_file(data):
+            f_name = input("file name:")
+            path = "C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\" + str(f_name) + ".csv"
+            data.to_csv(path)
+
+            return print("Your file has been saved in", path)
+
         Create_file(self.df)
         return
 
-    def Create_file(data):
 
-        f_name = input("file name:")
-        path = "C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\" + str(f_name) + ".csv"
-        data.to_csv(path)
-
-        return print("Your file has been saved in", path)
 
 
 
