@@ -23,14 +23,15 @@ class Mouse_Tiki_Crawler():
         self.n = n
         self.link = df["m_link"]
         self.i = i
-        self.browser = webdriver.Chrome(executable_path="chromedriver.exe")
 
-    def seting_options(self):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=1920x1080")
-        return
+
+        self.browser = webdriver.Chrome(executable_path="chromedriver.exe",chrome_options = chrome_options)
+
+
 
     def script_page(self):
         return self.browser.execute_script("window.scrollTo(0, 2350)")
@@ -44,7 +45,7 @@ class Mouse_Tiki_Crawler():
     def find_1ele_by_classname(self,classname,classname2):
 
         try:
-            element = WebDriverWait(self.browser, 15).until(
+            element = WebDriverWait(self.browser, 12).until(
                 EC.presence_of_element_located((By.CLASS_NAME, str(classname)))
             ).text
 
