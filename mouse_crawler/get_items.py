@@ -5,15 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
-#from ..get_mouse_link import page_up
 from time import sleep
 import random
 import pandas as pd
-
-df = pd.read_csv("mouse24link.csv")
-
-#df[["Name","Price","Shop","Brand","Sold","Rate","Comment","5","4","3","2","1"]] = None
-#print(df)
 
 class Mouse_Tiki_Crawler():
 
@@ -21,7 +15,6 @@ class Mouse_Tiki_Crawler():
         self.df = df
 
         self.n = n
-        self.link = df["m_link"]
         self.i = i
 
         chrome_options = Options()
@@ -29,27 +22,43 @@ class Mouse_Tiki_Crawler():
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=1920x1080")
 
-        self.browser = webdriver.Chrome(executable_path="chromedriver.exe",chrome_options = chrome_options)
+        self.browser = webdriver.Chrome(executable_path="mouse_crawler\\chromedriver.exe",chrome_options = chrome_options)
 
-
+    '''
+        Enter the class of variables
+            i : product link  
+            n : number
+        Use chrome_options to add incognito,headless to run underground and windowsize
+    '''
 
     def script_page(self):
+        # scrip page to a place where ever you want (fix impurity)
         return self.browser.execute_script("window.scrollTo(0, 2350)")
 
     def start_url(self):
         url = str(self.i)
         self.browser.maximize_window()
 
+        #start brower with a url
         return self.browser.get(url)
 
     def find_1ele_by_classname(self,time,classname,classname2):
-
+        
+        '''
+        fill in time need to wait, classname of the element 
+        and classname2 if that element may have another natural
+        '''
         try:
             element = WebDriverWait(self.browser, time).until(
                 EC.presence_of_element_located((By.CLASS_NAME, str(classname)))
             ).text
-
+        
         except:
+
+            '''
+            I try to find that element with classname 1, if i can't find it with classname1
+            then i will try to find it with classname2, even that, I still not see it that will be return Non
+            '''
 
             if classname2 != "Non":
                 try:
@@ -60,13 +69,14 @@ class Mouse_Tiki_Crawler():
                     element = "Non"
             else: element  = "Non"
 
-        finally:
-            print(element)
-
-        return element
+        finally: return element
 
     def find_ele_by_xpath(self,time,el_xpath):
 
+        '''
+        It just the same with find_1ele_by_classname but this time i find it with xpath
+        '''
+        
         try:
             element = WebDriverWait(self.browser, time).until(
                 EC.presence_of_element_located((By.XPATH, str(el_xpath)))
@@ -74,10 +84,16 @@ class Mouse_Tiki_Crawler():
         except:
             element = 0
         finally:
-            print(element)
-        return element
+            #print(element)
+            return element
 
     def get_rate_star(self,time,string):
+
+        '''
+        I create a list(star_list1) to check what i get after try to find all element with that classname
+        If I can't find anything that mean nobody had been rated is yet or that shop don't give anywway to warranty so it will be [0,0,0,0,0].
+        if i find 4 element or lower with that classname , it must be warranty.
+        '''
 
         star_list1 = []
         self.browser.execute_script("window.scrollTo(0, 2350)")
@@ -85,6 +101,8 @@ class Mouse_Tiki_Crawler():
             star = WebDriverWait(self.browser, time).until(
                 EC. presence_of_all_elements_located((By.CLASS_NAME, str(string)))
             )
+
+            # Add all a found to list
             def rate_star_list(star):
                 if len(star) > 0:
                     for i in star:
@@ -100,14 +118,20 @@ class Mouse_Tiki_Crawler():
             def last_star_list(star_list = []):
                 #print("len", len(star_list1))
                 if len(star_list1) == 5:
+                    # this mean that i was found rate star
                     star_list = star_list1
                 elif (len(star_list1) == 4) :
+                    # this mean that i was found warranty 
                     star_list = star_list1
                 elif len(star_list1) < 4 :
-                    for i in range(4 - len(star_list1)):
-                        star_list.append(0)
+                    '''
+                    This mean that shop given warranty information less than i want
+                    But it will alwway have warranty time so i push it right the fist  
+                    '''
                     for i in star_list1:
                         star_list.append(i)
+                    for i in range(4 - len(star_list1)):
+                        star_list.append(0)
 
                 return star_list
             #last_star_list()
@@ -117,7 +141,7 @@ class Mouse_Tiki_Crawler():
                     print(i)
                 return
 
-            show_rate_star(last_star_list())
+            #show_rate_star(last_star_list())
 
         return last_star_list()
 

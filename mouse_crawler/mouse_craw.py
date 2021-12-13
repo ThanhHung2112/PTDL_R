@@ -5,21 +5,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
-from scrapy.utils.project import get_project_settings
-from mouse_crawler.get_items import Mouse_Tiki_Crawler
+from get_items import Mouse_Tiki_Crawler
 from time import sleep
 import random
 import pandas as pd
 
-df = pd.read_csv("mouse24link.csv")
+df = pd.read_csv("mouse_crawler\\mouse24link.csv")
 
 class start_craw:
     def __init__(self,df):
         self.df = df
 
     def get_link(self):
-        self.df[["Name", "Price","Product_price","Discount", "Shop", "Brand", "Sold", "Warranty",
-                 "Warranty_way", "Warranty_place", "From", "Rate", "Comment", "5", "4", "3", "2", "1"]] = None
+        self.df[["Name", "Price","Product_price","Discount", "Shop", "Brand", "Sold", "Warranty_time",
+                 "Warranty_way", "Warranty_place", "Rate", "Comment", "5", "4", "3", "2", "1","More_inf"]] = None
         print(self.df)
         return self.df
 
@@ -27,26 +26,27 @@ class start_craw:
         n = 0
         self.df = SC.get_link()
         cls2 = "Non"
+        
         for i in df["m_link"]:
 
             MTC = Mouse_Tiki_Crawler(df, i, n)
-            #print(MTC.setting_options())
             MTC.start_url()
-            print(n+1,i)
             self.df["Name"][n] = MTC.find_1ele_by_classname(10,"title",cls2)
             self.df["Price"][n] = MTC.find_1ele_by_classname(10,"product-price__current-price","flash-sale-price")
-            self.df["Product_price"][n] = MTC.find_1ele_by_classname(0,"product-price__list-price",cls2)
+            pro_p = MTC.find_1ele_by_classname(0,"product-price__list-price",cls2)
+            if pro_p == 0:
+                self.df["Product_price"][n] = self.df["Price"][n]
+            else: self.df["Product_price"][n] = pro_p
             self.df["Discount"][n] = MTC.find_1ele_by_classname(0,"product-price__discount-rate",cls2)
             self.df["Shop"][n] = MTC.find_1ele_by_classname(10,"seller-name",cls2)
             self.df["Brand"][n] =  MTC.find_1ele_by_classname(0,"brand-and-author",cls2)
             warranty = MTC.get_rate_star(2,"itemRight")
-            print(len(warranty))
-            self.df["Warranty"][n] = warranty[0]
+            self.df["Warranty_time"][n] = warranty[0]
             self.df["Warranty_way"][n] = warranty[1]
             self.df["Warranty_place"][n] = warranty[2]
             self.df["Sold"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
             MTC.script_page()
-            self.df["From"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[3]/div[1]/div[1]/div/table/tbody/tr[3]/td[2]")
+            self.df["More_inf"][n] = MTC.find_1ele_by_classname(2,"content has-table",cls2)
             self.df["Rate"][n] = MTC.find_1ele_by_classname(2,"review-rating__point",cls2)
             self.df["Comment"][n] = MTC.find_1ele_by_classname(2,"review-rating__total",cls2)
             star = MTC.get_rate_star(2,"review-rating__number")
@@ -55,26 +55,21 @@ class start_craw:
             self.df["3"][n] = star[2]
             self.df["2"][n] = star[3]
             self.df["1"][n] = star[4]
-
+             
             MTC.browser.close()
-            #df.loc[n] =  [name,price,seller,brand,sold,warranty,come_from,rate,review,star5,star4,start3,star2,star1]
-
             #print(df.loc[n])
+            #if n == 4 : break
             n += 1
 
         def Create_file(data):
             f_name = input("file name:")
-            path = "C:\\Users\\Admin\\Desktop\\Web Scrapy\\mouse_crawler\\" + str(f_name) + ".csv"
+            path = "C:\\Users\\Admin\\Desktop\\PTDL_R\\mouse_crawler\\" + str(f_name) + ".csv"
             data.to_csv(path)
 
             return print("Your file has been saved in", path)
 
         Create_file(self.df)
         return
-
-
-
-
 
 SC = start_craw(df)
 SC.craw()
