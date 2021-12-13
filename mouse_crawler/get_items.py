@@ -137,7 +137,7 @@ class Mouse_Tiki_Crawler():
             #last_star_list()
             def show_rate_star(star_list):
                 #print("list ")
-                for i in star_list:
+                for i in star_list:     
                     print(i)
                 return
 

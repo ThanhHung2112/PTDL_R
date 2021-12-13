@@ -46,7 +46,7 @@ class start_craw:
             self.df["Warranty_place"][n] = warranty[2]
             self.df["Sold"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
             MTC.script_page()
-            self.df["More_inf"][n] = MTC.find_1ele_by_classname(2,"content has-table",cls2)
+            self.df["More_inf"][n] = MTC.find_ele_by_xpath(2,"content has-table")
             self.df["Rate"][n] = MTC.find_1ele_by_classname(2,"review-rating__point",cls2)
             self.df["Comment"][n] = MTC.find_1ele_by_classname(2,"review-rating__total",cls2)
             star = MTC.get_rate_star(2,"review-rating__number")
