@@ -26,7 +26,7 @@ class start_craw:
         n = 0
         self.df = SC.get_link()
         cls2 = "Non"
-        
+                    
         for i in df["m_link"]:
 
             MTC = Mouse_Tiki_Crawler(df, i, n)
