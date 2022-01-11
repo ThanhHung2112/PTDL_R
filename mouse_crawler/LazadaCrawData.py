@@ -1,0 +1,72 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+
+from get_items import Mouse_Tiki_Crawler
+from time import sleep
+import random
+import pandas as pd
+
+df = pd.read_csv("mouse_crawler\\mouse24link.csv")
+
+class start_craw:
+    def __init__(self,df):
+        self.df = df
+
+    def get_link(self):
+        self.df[["Name", "Price","Product_price","Discount", "Shop", "Brand", "Sold", "Warranty_time",
+                 "Warranty_way", "Warranty_place", "Rate", "Comment", "5", "4", "3", "2", "1"]] = None
+        print(self.df)
+        return self.df
+
+    def craw(self):
+        n = 0
+        self.df = SC.get_link()
+        cls2 = "Non"
+                    
+        for i in df["m_link"]:
+
+            MTC = Mouse_Tiki_Crawler(df, i, n)
+            MTC.start_url()
+            self.df["Name"][n] = MTC.find_ele_by_xpath(10,'//h1[@class="pdp-mod-product-badge-title"]/text()')
+            self.df["Price"][n] = MTC.find_ele_by_xpath(10,'//*[@id="module_product_price_1"]/div/div/span/text()')
+            self.df["Product_price"][n] = MTC.find_ele_by_xpath(10,'//*[@id="module_product_price_1"]/div/div/div/span[1]/text()')
+            self.df["Discount"][n] = MTC.find_ele_by_xpath(0,'//*[@id="module_product_price_1"]/div/div/div/span[2]/text()')
+            self.df["Shop"][n] = MTC.find_ele_by_xpath(10,'//*[@id="module_seller_info"]/div/div[1]/div[1]/div[2]/a[1]/text()')
+            self.df["Brand"][n] =  MTC.find_1ele_by_classname(0,"brand-and-author",cls2)
+            warranty = MTC.get_rate_star(2,"itemRight")
+            self.df["Warranty_time"][n] = warranty[0]
+            self.df["Warranty_way"][n] = warranty[1]
+            self.df["Warranty_place"][n] = warranty[2]
+            self.df["Sold"][n] = MTC.find_ele_by_xpath(2,"/html/body/div[1]/div[1]/main/div[3]/div[1]/div[3]/div[1]/div[2]/div[2]")
+            MTC.script_page()
+            #self.df["More_inf"][n] = MTC.find_ele_by_xpath(2,"content has-table")
+            self.df["Rate"][n] = MTC.find_ele_by_xpath(2,'//a[@class="pdp-link pdp-link_size_s pdp-link_theme_blue pdp-review-summary__link"]/text()')
+            self.df["Comment"][n] = MTC.find_ele_by_xpath(2,'//*[@id="module_product_review_star_1"]/div/a')
+            
+            self.df["5"][n] = 
+            self.df["4"][n] = 
+            self.df["3"][n] = 
+            self.df["2"][n] = 
+            self.df["1"][n] = 
+             
+            MTC.browser.close()
+            #print(df.loc[n])
+            #if n == 4 : break
+            n += 1
+
+        def Create_file(data):
+            f_name = input("file name:")
+            path = "C:\\Users\\Admin\\Desktop\\PTDL_R\\mouse_crawler\\" + str(f_name) + ".csv"
+            data.to_csv(path)
+
+            return print("Your file has been saved in", path)
+
+        Create_file(self.df)
+        return
+
+SC = start_craw(df)
+SC.craw()

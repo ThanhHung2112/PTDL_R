@@ -57,8 +57,6 @@ class start_craw:
             self.df["1"][n] = star[4]
              
             MTC.browser.close()
-            #print(df.loc[n])
-            #if n == 4 : break
             n += 1
 
         def Create_file(data):

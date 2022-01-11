@@ -11,9 +11,8 @@ import pandas as pd
 
 # Options
 
-
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("--headless")
 chrome_options.add_argument("--incognito")
 #chrome_options.add_argument("--window-size=1920x1080")
 
@@ -21,7 +20,10 @@ chrome_options.add_argument("--incognito")
 def star_url(i):
     browser = webdriver.Chrome(executable_path="chromedriver.exe")
     browser.maximize_window()
-    browser.get("https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page="+str(i))
+    #url = "https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page="
+    url2_1 = "https://www.lazada.vn/catalog/?_keyori=ss&from=input&page="
+    url2_2 = "&q=Chu%E1%BB%99t%20m%C3%A1y%20t%C3%ADnh&spm=a2o4n.searchlist.search.go.41bd4aefRlNGWT"
+    browser.get(url2_1+str(i)+url2_2)
     return
 
 '''
@@ -46,9 +48,10 @@ mouse_link = []
 #all_mouse = browser.find_elements_by_class_name("info")
 x = a = 1
 for i in range(page_number):
+    url = 'https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page='
     browser = webdriver.Chrome(executable_path="chromedriver.exe")
     browser.maximize_window()
-    browser.get("https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page=" + str(i+1))
+    browser.get(url + str(i+1))
 
     browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 

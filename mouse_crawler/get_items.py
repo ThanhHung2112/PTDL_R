@@ -45,7 +45,7 @@ class Mouse_Tiki_Crawler():
     def find_1ele_by_classname(self,time,classname,classname2):
         
         '''
-        fill in time need to wait, classname of the element 
+        Write time need to wait, classname of the element 
         and classname2 if that element may have another natural
         '''
         try:
@@ -87,6 +87,13 @@ class Mouse_Tiki_Crawler():
             #print(element)
             return element
 
+            # Add all a found to list
+    def rate_star_list(star):
+        if len(star) > 0:
+            for i in star:
+                star_list1.append(i.text)
+        return star_list1 
+
     def get_rate_star(self,time,string):
 
         '''
@@ -101,13 +108,6 @@ class Mouse_Tiki_Crawler():
             star = WebDriverWait(self.browser, time).until(
                 EC. presence_of_all_elements_located((By.CLASS_NAME, str(string)))
             )
-
-            # Add all a found to list
-            def rate_star_list(star):
-                if len(star) > 0:
-                    for i in star:
-                        star_list1.append(i.text)
-                return star_list1
             #print("done Try")
             rate_star_list(star)
             #print(star_list1)
