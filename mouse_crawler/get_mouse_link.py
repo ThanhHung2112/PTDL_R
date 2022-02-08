@@ -20,10 +20,10 @@ chrome_options.add_argument("--incognito")
 def star_url(i):
     browser = webdriver.Chrome(executable_path="chromedriver.exe")
     browser.maximize_window()
-    #url = "https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page="
-    url2_1 = "https://www.lazada.vn/catalog/?_keyori=ss&from=input&page="
-    url2_2 = "&q=Chu%E1%BB%99t%20m%C3%A1y%20t%C3%ADnh&spm=a2o4n.searchlist.search.go.41bd4aefRlNGWT"
-    browser.get(url2_1+str(i)+url2_2)
+    url = "https://tiki.vn/search?q=chu%E1%BB%99t+m%C3%A1y+t%C3%ADnh&sort=top_seller&page="
+    #url2_1 = "https://www.lazada.vn/catalog/?_keyori=ss&from=input&page="
+    #url2_2 = "&q=Chu%E1%BB%99t%20m%C3%A1y%20t%C3%ADnh&spm=a2o4n.searchlist.search.go.41bd4aefRlNGWT"
+    browser.get(url +str(i))
     return
 
 '''
@@ -33,7 +33,7 @@ browser = ChromeDriver(options)
 '''
 page_number = int(input("Write page number to craw: "))
 
-while  page_number > 10 :
+while  page_number < 10 :
     print("page_number p must be smaller than 10    ")
     page_number = int(input("Write page number to craw:"))
 def page_up():
